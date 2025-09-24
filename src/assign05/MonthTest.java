@@ -33,15 +33,26 @@ public class MonthTest {
 	}
 	
 	@Test
+	public void testLastDayJanuary() {
+		Month jan = new Month(1);
+		assertEquals(31, jan.lastDay(false), "Last day of April is incorrect");
+	}
+	
+	@Test
 	public void testLastDayFebruaryLeapYear() {
 		Month feb = new Month(2);
-		assertEquals(29, feb.lastDay(true), "Last day of February is incorrect for a leap year");
+		assertEquals(29, feb.lastDay(true), "Last day of April is incorrect");
 	}
 	
 	@Test
 	public void testLastDayFebruaryNotLeapYear() {
 		Month feb = new Month(2);
-		assertEquals(28, feb.lastDay(false), "Last day of February is incorrect for a normal year");
+		assertEquals(28, feb.lastDay(false), "Last day of April is incorrect");
+	}
+	@Test
+	public void testLastDayMarch() {
+		Month mar = new Month(3);
+		assertEquals(31, mar.lastDay(false), "Last day of April is incorrect");
 	}
 	
 	@Test
@@ -54,6 +65,42 @@ public class MonthTest {
 	public void testLastDayMay() {
 		Month may = new Month(5);
 		assertEquals(31, may.lastDay(false), "Last day of May is incorrect");
+	}
+	
+	@Test
+	public void testLastDayJune() {
+		Month jun = new Month(2);
+		assertEquals(30, jun.lastDay(false), "Last day of April is incorrect");
+	}
+	
+	@Test
+	public void testLastDayJuly() {
+		Month jul = new Month(7);
+		assertEquals(31, jul.lastDay(false), "Last day of April is incorrect");
+	}
+	
+	@Test
+	public void testLastDayAugust() {
+		Month aug = new Month(8);
+		assertEquals(31, aug.lastDay(false), "Last day of April is incorrect");
+	}
+	
+	@Test
+	public void testLastDaySeptember() {
+		Month sep = new Month(9);
+		assertEquals(30, sep.lastDay(false), "Last day of April is incorrect");
+	}
+	
+	@Test
+	public void testLastDayOctober() {
+		Month oct = new Month(10);
+		assertEquals(31, oct.lastDay(false), "Last day of April is incorrect");
+	}
+	
+	@Test
+	public void testLastDayNovember() {
+		Month nov = new Month(11);
+		assertEquals(30, nov.lastDay(false), "Last day of April is incorrect");
 	}
 	
 	@Test
