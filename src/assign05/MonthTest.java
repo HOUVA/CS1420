@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 /**
  * This class contains unit tests to check the correctness of the Month class.
  * 
- * @author CS 1420 course staff and UPDATE WITH YOUR NAME
- * @version UPDATE WITH MOST RECENT DATE
+ * @author CS 1420 course staff and Matthew Suggars.
+ * @version September 23, 2025.
  */
 public class MonthTest {
 	@Test
@@ -18,6 +18,13 @@ public class MonthTest {
 		Month jan = new Month();
 		assertEquals(1, jan.getMonthNumber(), "No-parameter constructor does not set month number to 1");
 	}
+	
+	@Test
+	public void marchConstructor() {
+		Month mar = new Month(3);
+		assertEquals(3, mar.getMonthNumber(), "Constructor does not set month number to 3");
+	}
+	
 	
 	@Test
 	public void testToString() {
@@ -29,6 +36,12 @@ public class MonthTest {
 	public void testLastDayFebruaryLeapYear() {
 		Month feb = new Month(2);
 		assertEquals(29, feb.lastDay(true), "Last day of February is incorrect for a leap year");
+	}
+	
+	@Test
+	public void testLastDayFebruaryNotLeapYear() {
+		Month feb = new Month(2);
+		assertEquals(28, feb.lastDay(false), "Last day of February is incorrect for a normal year");
 	}
 	
 	@Test
@@ -44,6 +57,12 @@ public class MonthTest {
 	}
 	
 	@Test
+	public void testLastDayDecember() {
+		Month dec = new Month(12);
+		assertEquals(31, dec.lastDay(false), "Last day of May is incorrect");
+	}
+	
+	@Test
 	public void testValidDayNormal() {
 		Month jun = new Month(6);
 		assertTrue(jun.validDay(10, false), "validDay incorrect for valid day");
@@ -56,10 +75,23 @@ public class MonthTest {
 	}
 	
 	@Test
+	public void testValidDayFebruaryNotLeapYear() {
+		Month feb = new Month(2);
+		assertFalse(feb.validDay(29, false), "validDay incorrect for normal year February");
+	}
+	
+	@Test
 	public void testEqualsFalse() {
 		Month sep = new Month(9);
 		assertFalse(sep.equals(new Month(8)),
 				"equals method does not return false when passed Month object that is the different");
+	}
+	
+	@Test
+	public void testEqualsTrue() {
+		Month sep = new Month(9);
+		assertTrue(sep.equals(new Month(9)),
+				"equals method does not return true when passed Month object that is the same");
 	}
 	
 	@Test

@@ -1,35 +1,33 @@
 package assign05;
 
 /**
- * This class contains a main method to demonstrate how to create and use 
- * CalendarDate objects, as well as a method to count the number of dates
- * in a given array that come before a given target date (to be added by 
- * students).
+ * This class contains a main method to demonstrate how to create and use
+ * CalendarDate objects, as well as a method to count the number of dates in a
+ * given array that come before a given target date (to be added by students).
  * 
- * @author CS 1420 course staff and UPDATE WITH YOUR NAME
- * @version UPDATE WITH MOST RECENT DATE
+ * @author CS 1420 course staff and Matthew Suggars.
+ * @version September 29, 2025.
  */
 public class CalendarDateDemo {
 
 	public static void main(String[] args) {
 		CalendarDate lastDayOfClass = new CalendarDate(12, 4, 2025);
 		CalendarDate finalExamDate = new CalendarDate(12, 8, 2025);
- 		
-		System.out.println("The CS 1420 final exam is on " + finalExamDate + 
-				", which is day " + finalExamDate.dayOfYear() + " of this year.");
-		System.out.print("The last day of class is on " + lastDayOfClass + 
-				", which is ");
-		if(lastDayOfClass.comesBefore(finalExamDate))
+
+		System.out.println("The CS 1420 final exam is on " + finalExamDate + ", which is day "
+				+ finalExamDate.dayOfYear() + " of this year.");
+		System.out.print("The last day of class is on " + lastDayOfClass + ", which is ");
+		if (lastDayOfClass.comesBefore(finalExamDate))
 			System.out.print("before");
-		else if(lastDayOfClass.comesAfter(finalExamDate))
+		else if (lastDayOfClass.comesAfter(finalExamDate))
 			System.out.print("after");
 		else
 			System.out.print("on the same day as");
 		System.out.println(" the final exam.");
-		
+
 		finalExamDate.advanceOneDay();
 		System.out.println("The next day of the exam period is " + finalExamDate + ".");
-		
+
 		CalendarDate[] classMeetings = new CalendarDate[28];
 		classMeetings[0] = new CalendarDate(8, 27, 2025);
 		classMeetings[1] = new CalendarDate(9, 10, 2025);
@@ -59,10 +57,28 @@ public class CalendarDateDemo {
 		classMeetings[25] = new CalendarDate(11, 26, 2025);
 		classMeetings[26] = new CalendarDate(9, 3, 2025);
 		classMeetings[27] = new CalendarDate(8, 25, 2025);
-	
+
 		// Uncomment print statement after defining the countDatesBefore method.
-		/* System.out.println("There are " + countDatesBefore(classMeetings, new CalendarDate(10, 15, 2025)) +
-				" class meetings before the midterm exam."); */
+		System.out.println("There are " + countDatesBefore(classMeetings, new CalendarDate(10, 15, 2025))
+				+ " class meetings before the midterm exam.");
 		// Expected output: There are 14 class meetings before the midterm exam.
+	}
+
+	/**
+	 * This method counts the number of dates that come before the midterm exam.
+	 * 
+	 * @param dates  - an array of CalendarDate Objects.
+	 * @param target - the date of the final exam.
+	 * @return the number of dates before the midterm exam.
+	 */
+	public static int countDatesBefore(CalendarDate[] dates, CalendarDate target) {
+		int numberOfDates = 0;
+
+		for (CalendarDate date : dates) {
+			if (date.comesBefore(target)) {
+				numberOfDates++;
+			}
+		}
+		return numberOfDates;
 	}
 }
