@@ -53,10 +53,8 @@ public class Month {
 			lastDayNum = 31;
 			break;
 		case 2:
-			if (isLeapYear)
-				lastDayNum = 29;
-			else
-				lastDayNum = 28;
+			if (isLeapYear) lastDayNum = 29;
+			else lastDayNum = 28;
 			break;
 		case 3:
 			lastDayNum = 31;
@@ -99,7 +97,7 @@ public class Month {
 	 * @return true if the day exists in the month. Otherwise false.
 	 */
 	public boolean validDay(int day, boolean isLeapYear) {
-		return day <= lastDay(isLeapYear);
+		return day > 0 && day <= lastDay(isLeapYear);
 	}
 
 	/**
@@ -159,8 +157,7 @@ public class Month {
 	 * @return true if both objects are the same type and value, otherwise false.
 	 */
 	public boolean equals(Object other) {
-		if (!(other instanceof Month))
-			return false;
+		if (!(other instanceof Month)) return false;
 		Month otherMonth = (Month) other;
 
 		return this.monthNumber == otherMonth.monthNumber;

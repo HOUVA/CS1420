@@ -197,9 +197,7 @@ public class MethodPractice {
 				}
 			}else if (input.hasNextInt()) {
 				int numberInt = input.nextInt();
-				if (numberInt > 0) {
-					positiveCounter++;
-				}
+				if (numberInt > 0) positiveCounter++;
 			}else {
 				String excess = input.next(); // used to collect any non int or double tokens.
 			}				
@@ -244,15 +242,10 @@ public class MethodPractice {
 	 * @return array with only even elements.
 	 */
 	public static int[] generateEvenArray(int length) {
-		int[] newArray = new int[length];
-		int evenElement = 0;
-		
-		for (int index = 0; index < length; index++) {
-			newArray[index] = evenElement;
-			evenElement += 2;
-		}
-		
-		return newArray;
+		int[] evenArray = new int[length];
+		for (int evenIndex = 0; evenIndex < length; evenIndex++)
+			evenArray[evenIndex] = evenIndex * 2;
+		return evenArray;
 	}
 	
 	/**

@@ -107,7 +107,7 @@ public class CalendarDate {
 			this.day = 1;
 			if (this.month.getMonthNumber() > 12) {
 				this.year += 1;
-				this.month = new Month();
+				this.month = new Month(1);
 			}
 		}
 
@@ -126,7 +126,9 @@ public class CalendarDate {
 			sumOfDays += previousMonth.lastDay(isLeapYear());
 		}
 
-		return sumOfDays + this.day;
+		sumOfDays += this.day;
+
+		return sumOfDays;
 	}
 
 	/**
