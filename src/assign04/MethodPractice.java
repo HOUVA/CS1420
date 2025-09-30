@@ -169,7 +169,7 @@ public class MethodPractice {
 			if (message.charAt(charIndex) + shiftAmount < 32) {
 				messageArray[charIndex] = (char)(message.charAt(charIndex) + shiftAmount + 32);
 			} else if(message.charAt(charIndex) + shiftAmount > 126) {
-				messageArray[charIndex] = (char)(message.charAt(charIndex) + shiftAmount - 95);
+				messageArray[charIndex] = (char)(32 + (message.charAt(charIndex)+ shiftAmount -32) % 95);
 			}else {
 				messageArray[charIndex] = (char)(message.charAt(charIndex) + shiftAmount);
 			}
@@ -223,9 +223,9 @@ public class MethodPractice {
 	public static int totalInRange(int[] numbersList, int begin, int end) {
 		int totalValue = 0;
 		
-		if (end < begin || end == begin)
+		if (end <= begin)
 			return 0;
-		else if (begin > numbersList.length - 1 || end - 1 > numbersList.length - 1) 
+		else if (begin >= numbersList.length || end > numbersList.length) 
 			return 0;
 		else 
 			for (int index = begin; index < end; index++) 

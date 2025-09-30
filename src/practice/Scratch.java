@@ -6,8 +6,10 @@ import java.io.File;
 
 public class Scratch {
 	public static void main(String[] args) {
-		String empty = "";
-		System.out.println((int)empty.charAt(0));
+		Fraction half = new Fraction(1, 2);
+		System.out.println(half.getNumerator() + " " + half.getDenominator());
+		
+		
 		
 		
 	}
@@ -25,3 +27,4 @@ public class Scratch {
 		}	
 	}
 }
+
