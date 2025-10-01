@@ -69,7 +69,7 @@ public class WordTest {
 	// TODO: Write at least three more tests for countOccurrences, especially edge cases, exceptions, and how to ensure the method does not change object state.
 
 	// TODO: Uncomment in Step 6 to test replaceLastOccurrence.
-	/*
+	
 	// Provided
 	@Test
 	public void testReplaceLastOccurrenceExceptionFirstArgument() {
@@ -84,12 +84,12 @@ public class WordTest {
 		hello.replaceLastOccurrence('l', 's');
 		assertEquals("helso", hello.toString());
 	}
-	*/
+	
 	
 	// TODO: Write at least three more tests for replaceLastOccurrence, considering cases untested by provided tests.
 
 	// TODO: Uncomment in Step 8 to test reverse.
-	/*
+	
 	// Provided
 	@Test
 	public void testReverseHello() {
@@ -103,7 +103,7 @@ public class WordTest {
 		Word empty = new Word("");
 		assertEquals("", empty.reverse().toString());
 	}
-	*/
+	
 	
 	// TODO: Write at least three more tests for reverse, considering cases untested by provided tests.
 }

@@ -44,11 +44,10 @@ public class Word {
 	 * (driver method).
 	 * 
 	 * @param letter - must be between A-Z or a-z.
-	 * @return the number of occurences of letter in Word.
+	 * @return the number of occurrences of letter in Word.
 	 */
 	public int countOccurrences(char letter) {
-		if (!((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z')))
-			throw new IllegalArgumentException("argument passed is not a letter");
+		validatedChar(letter);
 		return countOccurrences(letter, 0);
 	}
 	
@@ -73,30 +72,63 @@ public class Word {
 	}
 	
 	/**
+	 * Replaces the last occurrence of a letter in Word. If no occurrence exists, Word remains unchanged.
+	 * (driver method).
 	 * 
-	 * @param letter
-	 * @param replacement
+	 * @param letter - character to check occurrence of
+	 * @param replacement - character to replace the last occurrence of letter in Word.
 	 */
 	public void replaceLastOccurrence(char letter, char replacement) {
-		if (!((replacement >= 'A' && replacement <= 'Z') || (replacement >= 'a' && replacement <= 'z')))
-			throw new IllegalArgumentException("argument passed is not a letter");
+		validatedChar(letter);
 		
-		replaceLastOccurrence(letter, replacement, 0);
+		replaceLastOccurrence(letter, replacement, letters.length - 1);
 	}
 	
 	/**
+	 * Replaces the a letter in Word with another letter. If no occurrence exists, Word remains unchanged.
+	 * If the letter occurs more than once in Word, then only the last letter is changed.
+	 * (recursive method).
 	 * 
-	 * @param letter
-	 * @param replacement
-	 * @param index
+	 * @param letter - character to check occurrence. 
+	 * @param replacement - character to replace letter in Word
+	 * @param index - index of letters to check occurrence of character.
 	 */
 	private void replaceLastOccurrence(char letter, char replacement, int index) {
-		if (index == letters.length)
+		if (index < 0)
 			return;
-		if (countOccurrences(letter, index) == 1)
-			
+	
+		if (letters[index] == letter) {
+			letters[index] = replacement;
+			return;
+		}
 		
-		replaceLastOccurrence(letter, replacement, index + 1);
+		replaceLastOccurrence(letter, replacement, index - 1);
+	}
+	/**
+	 * Generates a new Word object with the same letters but reversed.
+	 * (driver method)
+	 * 
+	 * @return new Word with letters reversed.
+	 */
+	public Word reverse() {
+		Word newWord = new Word(this.letters);
+
+		newWord.reverse(letters, 0);
+		return newWord;
+	}
+	
+	private void reverse(char[] reversedWord, int index) {
+		if (reversedWord.length == 0)
+			return;
+		if (index > reversedWord.length / 2)
+			return;
+		
+		char firstChar = reversedWord[index];
+		reversedWord[index] = reversedWord[reversedWord.length - 1 - index];
+		reversedWord[reversedWord.length - 1 - index] = firstChar;
+		
+		
+		reverse(reversedWord, index + 1);
 	}
 
 	/**
@@ -114,6 +146,12 @@ public class Word {
 			else
 				throw new IllegalArgumentException("Letters must be between A-Z or a-z");
 		}
+		
+	}
+	
+	private void validatedChar(char letter) {
+		if (!((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z')))
+			throw new IllegalArgumentException("argument passed is not a letter");
 		
 	}
 }
