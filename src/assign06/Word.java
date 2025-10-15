@@ -1,17 +1,23 @@
 package assign06;
 
 public class Word {
-
 	private char[] letters;
 
+	/**
+	 * Constructor if String is given. Sets the elements of the letters array to the elements in the String.
+	 * 
+	 * @param word - String to assign values to letters.
+	 */
 	public Word(String word) {
-		letters = word.toCharArray();
-		validateCharArray();	
+		letters = validatedCharArray(word.toCharArray());	
 	}
 
-	public Word(char[] word) {
-		letters = word;
-		validateCharArray();
+	/**
+	 * Constructor if char array is given. Sets the elements of the letters array accordingly.
+	 * @param word - char array to assign to letters.
+	 */
+	public Word(char[] word) {	
+		letters = validatedCharArray(word);
 	}
 	
 	/**
@@ -40,7 +46,7 @@ public class Word {
 	}
 	
 	/**
-	 * Returns the number of times the letter passed appears in the Word object.
+	 * Returns the number of times the given letter occurs in the word represented by this object.
 	 * (driver method).
 	 * 
 	 * @param letter - must be between A-Z or a-z.
@@ -50,7 +56,6 @@ public class Word {
 		validatedChar(letter);
 		return countOccurrences(letter, 0);
 	}
-	
 	
 	/**
 	 * Returns an integer representing the number of occurrences of the letter in the Word.
@@ -80,6 +85,7 @@ public class Word {
 	 */
 	public void replaceLastOccurrence(char letter, char replacement) {
 		validatedChar(letter);
+		validatedChar(replacement);
 		
 		replaceLastOccurrence(letter, replacement, letters.length - 1);
 	}
@@ -104,6 +110,7 @@ public class Word {
 		
 		replaceLastOccurrence(letter, replacement, index - 1);
 	}
+	
 	/**
 	 * Generates a new Word object with the same letters but reversed.
 	 * (driver method)
@@ -111,10 +118,12 @@ public class Word {
 	 * @return new Word with letters reversed.
 	 */
 	public Word reverse() {
-		Word newWord = new Word(this.letters);
+		char[] reversedArray = letters;
+		Word reversed = new Word(reversedArray);
+		
 
-		newWord.reverse(letters, 0);
-		return newWord;
+		reversed.reverse(reversedArray, 0);
+		return reversed;
 	}
 	
 	private void reverse(char[] reversedWord, int index) {
@@ -132,26 +141,31 @@ public class Word {
 	}
 
 	/**
-	 * Validates all characters in the letters array are between A-Z or a-z.
+	 * Private helper method that validates all characters in the letters array are between A-Z or a-z.
 	 * If any characters are not in that range, throws IllegalArgumentException.
 	 */
-	private void validateCharArray() {
-		if (letters == null)
+	private char[] validatedCharArray(char[] array) {
+		if (array == null)
 			throw new IllegalArgumentException("null passed as argument");
 		
-		for (int letterIndex = 0; letterIndex < letters.length; letterIndex++) {
-			char letter = letters[letterIndex];
-			if((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z'))
-				letters[letterIndex] = letter;
-			else
-				throw new IllegalArgumentException("Letters must be between A-Z or a-z");
+		char[] validArray = new char[array.length];
+		for (int letterIndex = 0; letterIndex < validArray.length; letterIndex++) {
+			char letter = array[letterIndex];
+			validatedChar(letter);
+			validArray[letterIndex] = letter;
 		}
+		
+		return validArray;
 		
 	}
 	
+	/**
+	 * Private helper method that validates if a letter is between A-Z or a-z.
+	 * If letter is not in range, throws IllegalArgumentException.
+	 * @param letter
+	 */
 	private void validatedChar(char letter) {
 		if (!((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z')))
 			throw new IllegalArgumentException("argument passed is not a letter");
-		
 	}
 }

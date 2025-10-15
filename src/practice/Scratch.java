@@ -6,12 +6,10 @@ import java.io.File;
 
 public class Scratch {
 	public static void main(String[] args) {
-		Fraction half = new Fraction(1, 2);
-		System.out.println(half.getNumerator() + " " + half.getDenominator());
-		
-		
-		
-		
+	}
+	
+	public static void change(String s) {
+		s = "Bye";
 	}
 	
 	/**
@@ -25,6 +23,10 @@ public class Scratch {
 			inputList[index] = inputList[inputList.length - 1 - index];
 			inputList[inputList.length - 1 - index] = temp;
 		}	
+	}
+	
+	public static void triple(int number) {
+		number *= 3;
 	}
 }
 
