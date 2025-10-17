@@ -6,6 +6,10 @@ import java.io.File;
 
 public class Scratch {
 	public static void main(String[] args) {
+		String first = "Me";
+		String second = "Me";
+		
+		System.out.println(first.compareTo(second));
 	}
 	
 	public static void change(String s) {

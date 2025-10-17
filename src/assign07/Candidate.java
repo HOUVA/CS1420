@@ -21,8 +21,10 @@ public class Candidate implements Comparable<Candidate>{
 	 * @throws IllegalArgumentException if age is negative or rating is out of range
 	 */
 	public Candidate(String name, int age, int rating) {
-		if (age < 0 || !(rating <= 1 && rating >=10))
-				throw new IllegalArgumentException("Age cannot be negative");
+		if (age < 0 )
+			throw new IllegalArgumentException("Age must be positive");
+		else if (!(rating >= 1 && rating <=10))
+			throw new IllegalArgumentException("Rating must be between 1 - 10");
 		this.name = name;
 		this.age = age;
 		this.rating = rating;
@@ -38,7 +40,7 @@ public class Candidate implements Comparable<Candidate>{
 	 */
 	public Candidate(String name, int age) {
 		if (age < 0)
-			throw new IllegalArgumentException("Age cannot be negative");
+			throw new IllegalArgumentException("Age must be positive");
 		this.name = name;
 		this.age = age;
 		rating = 1;
@@ -68,11 +70,10 @@ public class Candidate implements Comparable<Candidate>{
 	 *       correctly positive, negative, or zero is alright.
 	 */
 	public int compareTo(Candidate other) {
-		if ((this.name.compareTo(other.name) > 0) || (this.age > other.age))
-			return 1;
-		else if ((this.name.compareTo(other.name) < 0) || (this.age < other.age))
-			return -1;
-		return 0;
+		if ((this.name.compareTo(other.name) != 0))
+			return this.name.compareTo(other.name);
+		else
+			return this.age - other.age;
 	}
 	
 	/**

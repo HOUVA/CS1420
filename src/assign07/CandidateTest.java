@@ -37,22 +37,22 @@ class CandidateTest {
 	
 	@Test
 	public void compareToNameBefore() {
-		assertEquals(-1, angie.compareTo(matthew));
+		assertTrue(angie.compareTo(matthew) < 0);
 	}
 	
 	@Test
 	public void compareToNameAfter() {
-		assertEquals(1, matthew.compareTo(angie));
+		assertTrue(matthew.compareTo(angie) > 0);
 	}
 	
 	@Test
 	public void compareToNameEqualAgeBefore() {
-		assertEquals(-1, angie.compareTo(new Candidate("Angie", 26)));
+		assertTrue(angie.compareTo(new Candidate("Angie", 26)) < 0);
 	}
 	
 	@Test
 	public void compareToNameEqualAgeAfter() {
-		assertEquals(1, marquis.compareTo(new Candidate("Marquis", 26)));
+		assertTrue(marquis.compareTo(new Candidate("Marquis", 26)) > 0);
 	}	
 	
 	@Test
