@@ -4,8 +4,8 @@ package assign07;
  * This represents a candidate for a job opening.
  * Candidates have a name, age, and a rating (1-10) based on their application.
  * 
- * @author CS 1420 course staff and UPDATE WITH YOUR NAME
- * @version UPDATE WITH MOST RECENT DATE
+ * @author CS 1420 course staff and Matthew Suggars
+ * @version 16 October 2025
  */
 public class Candidate implements Comparable<Candidate>{
 	private String name;
@@ -20,7 +20,7 @@ public class Candidate implements Comparable<Candidate>{
 	 * @param rating from 1 to 10 based on their application
 	 * @throws IllegalArgumentException if age is negative or rating is out of range
 	 */
-	public Candidate(String name, int age, int rating) {
+	public Candidate(String name, int age, int rating) throws IllegalArgumentException{
 		if (age < 0 )
 			throw new IllegalArgumentException("Age must be positive");
 		else if (!(rating >= 1 && rating <=10))
@@ -38,7 +38,7 @@ public class Candidate implements Comparable<Candidate>{
 	 * @param age of candidate
 	 * @throws IllegalArgumentException if age is negative
 	 */
-	public Candidate(String name, int age) {
+	public Candidate(String name, int age) throws IllegalArgumentException{
 		if (age < 0)
 			throw new IllegalArgumentException("Age must be positive");
 		this.name = name;
@@ -66,8 +66,6 @@ public class Candidate implements Comparable<Candidate>{
 	 * @return an int that is negative if this object comes before (is less than) other,
 	 *                        positive if this object comes after (is greater than) other, or
 	 *                        zero if this object is equal to other
-	 * NOTE: The value of the returned int is not important. Any value that is
-	 *       correctly positive, negative, or zero is alright.
 	 */
 	public int compareTo(Candidate other) {
 		if ((this.name.compareTo(other.name) != 0))
@@ -77,16 +75,17 @@ public class Candidate implements Comparable<Candidate>{
 	}
 	
 	/**
-	 * Is this object equal to the other?
+	 * Checks if this object equals other.
 	 * 
 	 * @param other object to compare this to
 	 * @return true if other is a Candidate with equal name and age, false otherwise
 	 */
+	@Override
 	public boolean equals(Object other) {
 		if (!(other instanceof Candidate))
 			return false;
 		Candidate otherCandidate = (Candidate)other;
-		return this.name == otherCandidate.name && this.age == otherCandidate.age;
+		return this.name.equals(otherCandidate.name) && this.age == otherCandidate.age;
 	}
 	
 	/**
@@ -95,7 +94,8 @@ public class Candidate implements Comparable<Candidate>{
 	 * 
 	 * @return a text representation of this Candidate
 	 */
+	@Override
 	public String toString() {
-		return (String)(name + "(" + age + ").");
+		return (String)(name + "(" + age + ")");
 	}
 }

@@ -2,6 +2,16 @@ package assign07;
 
 import java.util.Arrays;
 
+/**
+ * This class provides static methods to search for a Candidate Object in an array. 
+ * There is an option to search sequentially or binary.
+ * 
+ * Also contains private variable counter which counts the amount of recursive call each 
+ * method performs.
+ * 
+ * @author Matthew Suggars
+ * @version 16 October 2025
+ */
 public class CandidateSearch {
 	private static int counter;
 	
@@ -48,11 +58,11 @@ public class CandidateSearch {
 	
 	/**
 	 * Driver method for binarySearch. Sorts array and returns a Candidate if it exists in a list, 
-	 * If not, returns null;
+	 * If not, returns null
 	 * 
 	 * @param array - array of Candidate objects
 	 * @param target - Candidate to search for in array
-	 * @return Candidate if it exists in array, otherwise false.
+	 * @return Candidate if it exists in array, otherwise false
 	 */
 	public static Candidate binarySearch(Candidate[] array, Candidate target) {
 		counter = 0;
@@ -63,12 +73,13 @@ public class CandidateSearch {
 	}
 	
 	/**
+	 * Checks if a Candidate object exists in an array using binary recursion. 
 	 * 
-	 * @param array
-	 * @param target
-	 * @param lowIndex
-	 * @param highIndex
-	 * @return
+	 * @param array - array of Candidate objects
+	 * @param target - Candidate to search for in array
+	 * @param lowIndex - inclusive starting index in array
+	 * @param highIndex - exclusive ending index in array
+	 * @return Candidate if it exists in array, otherwise null
 	 */
 	private static Candidate binarySearch(Candidate[] array, Candidate target, int lowIndex, int highIndex) {
 		counter++;

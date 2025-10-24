@@ -4,7 +4,7 @@ package assign05;
  * This class contains a main method to demonstrate how to create and use
  * CalendarDate objects, as well as a method to count the number of dates in a
  * given array that come before a given target date (to be added by students).
- * 
+ *
  * @author CS 1420 course staff and Matthew Suggars.
  * @version September 29, 2025.
  */
@@ -17,12 +17,13 @@ public class CalendarDateDemo {
 		System.out.println("The CS 1420 final exam is on " + finalExamDate + ", which is day "
 				+ finalExamDate.dayOfYear() + " of this year.");
 		System.out.print("The last day of class is on " + lastDayOfClass + ", which is ");
-		if (lastDayOfClass.comesBefore(finalExamDate))
+		if (lastDayOfClass.comesBefore(finalExamDate)) {
 			System.out.print("before");
-		else if (lastDayOfClass.comesAfter(finalExamDate))
+		} else if (lastDayOfClass.comesAfter(finalExamDate)) {
 			System.out.print("after");
-		else
+		} else {
 			System.out.print("on the same day as");
+		}
 		System.out.println(" the final exam.");
 
 		finalExamDate.advanceOneDay();
@@ -66,7 +67,7 @@ public class CalendarDateDemo {
 
 	/**
 	 * This method counts the number of dates that come before the midterm exam.
-	 * 
+	 *
 	 * @param dates  - an array of CalendarDate Objects.
 	 * @param target - the date of the final exam.
 	 * @return the number of dates before the midterm exam.

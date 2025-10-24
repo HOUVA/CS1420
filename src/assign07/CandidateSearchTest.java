@@ -110,6 +110,10 @@ class CandidateSearchTest {
 		assertEquals(null, CandidateSearch.binarySearch(candidateList, kyle));
 	}
 	
+	@Test
+	public void testBinarySearchEmptyName() {
+		assertEquals(null, CandidateSearch.binarySearch(candidateList, empty));
+	}
 	
 	
 

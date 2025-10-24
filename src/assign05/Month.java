@@ -2,12 +2,12 @@ package assign05;
 
 /**
  * CS 1420 Accelerated Object-Oriented Programming Assignment 6: Month Class
- * 
+ *
  * @author Matthew Suggars U1067447
  * @version September 29, 2025
- * 
+ *
  *          This class represents a Month in the Calendar Year.
- * 
+ *
  */
 public class Month {
 	private int monthNumber;
@@ -22,7 +22,7 @@ public class Month {
 
 	/**
 	 * Constructor for a new Month object, given a number.
-	 * 
+	 *
 	 * @param monthNumber - value for month in the calendar year, must be between 1
 	 *                    and 12
 	 */
@@ -32,7 +32,7 @@ public class Month {
 
 	/**
 	 * Accesses the number of the Month.
-	 * 
+	 *
 	 * @return the number of the month
 	 */
 	public int getMonthNumber() {
@@ -41,7 +41,7 @@ public class Month {
 
 	/**
 	 * This method returns the last day of the month.
-	 * 
+	 *
 	 * @param isLeapYear - boolean value if the year as an integer is a leap year
 	 * @return the last day of the month
 	 */
@@ -53,8 +53,11 @@ public class Month {
 			lastDayNum = 31;
 			break;
 		case 2:
-			if (isLeapYear) lastDayNum = 29;
-			else lastDayNum = 28;
+			if (isLeapYear) {
+				lastDayNum = 29;
+			} else {
+				lastDayNum = 28;
+			}
 			break;
 		case 3:
 			lastDayNum = 31;
@@ -91,7 +94,7 @@ public class Month {
 
 	/**
 	 * This method checks if the day given exists in the month.
-	 * 
+	 *
 	 * @param day        - of the month
 	 * @param isLeapYear - boolean value if the year as an integer is a leap year
 	 * @return true if the day exists in the month. Otherwise false.
@@ -102,9 +105,10 @@ public class Month {
 
 	/**
 	 * This method represents the month as a name.
-	 * 
+	 *
 	 * @return a string name for the month.
 	 */
+	@Override
 	public String toString() {
 		String monthName = null;
 
@@ -153,11 +157,14 @@ public class Month {
 	/**
 	 * This method determines if the other object is both another Month object and
 	 * is equal to the Month object
-	 * 
+	 *
 	 * @return true if both objects are the same type and value, otherwise false.
 	 */
+	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof Month)) return false;
+		if (!(other instanceof Month)) {
+			return false;
+		}
 		Month otherMonth = (Month) other;
 
 		return this.monthNumber == otherMonth.monthNumber;
