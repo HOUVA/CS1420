@@ -9,6 +9,8 @@ public class Word {
 	 * @param word - String to assign values to letters.
 	 */
 	public Word(String word) {
+		if (word == null)
+			throw new IllegalArgumentException("word cannot be null");
 		letters = validatedCharArray(word.toCharArray());	
 	}
 
@@ -118,24 +120,21 @@ public class Word {
 	 * @return new Word with letters reversed.
 	 */
 	public Word reverse() {
-		char[] reversedArray = letters;
-		Word reversed = new Word(reversedArray);
+		char[] reversedArray = new char[letters.length];
+		for (int index = 0; index < reversedArray.length; index ++)
+			reversedArray[index] = letters[index];
 		
-
-		reversed.reverse(reversedArray, 0);
-		return reversed;
+		reverse(reversedArray, 0);
+		return new Word(reversedArray);
 	}
 	
 	private void reverse(char[] reversedWord, int index) {
-		if (reversedWord.length == 0)
-			return;
-		if (index > reversedWord.length / 2)
+		if (index >= reversedWord.length / 2)
 			return;
 		
 		char firstChar = reversedWord[index];
 		reversedWord[index] = reversedWord[reversedWord.length - 1 - index];
 		reversedWord[reversedWord.length - 1 - index] = firstChar;
-		
 		
 		reverse(reversedWord, index + 1);
 	}
