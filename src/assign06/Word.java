@@ -164,7 +164,8 @@ public class Word {
 	 * @param letter
 	 */
 	private void validatedChar(char letter) {
-		if (!((letter >= 'A' && letter <= 'Z') || (letter >= 'a' && letter <= 'z')))
+		char upperLetter = Character.toUpperCase(letter);
+		if (upperLetter < 'A' || upperLetter > 'Z')
 			throw new IllegalArgumentException("argument passed is not a letter");
 	}
 }
