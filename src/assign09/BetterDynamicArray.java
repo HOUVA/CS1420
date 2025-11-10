@@ -3,11 +3,11 @@ package assign09;
 import java.util.Arrays;
 
 /**
- * This class represents a better dynamic array of AudioEvents, doubling the length of
- * the backing array when more space is needed and never shrinking.
+ * This class represents a better dynamic array of AudioEvents, doubling the
+ * length of the backing array when more space is needed and never shrinking.
  * 
- * @author CS 1420 course staff and ADD STUDENT NAME
- * @version ADD DATE
+ * @author CS 1420 course staff and Matthew Suggars
+ * @version November 1 2025
  */
 public class BetterDynamicArray {
 
@@ -15,7 +15,8 @@ public class BetterDynamicArray {
 	private int elementCount; // the number of elements
 
 	/**
-	 * Creates a dynamic array with space for ten elements, but zero spaces occupied.
+	 * Creates a dynamic array with space for ten elements, but zero spaces
+	 * occupied.
 	 * 
 	 * DO NOT MODIFY THIS METHOD
 	 */
@@ -40,29 +41,30 @@ public class BetterDynamicArray {
 	 * @param value - the AudioEvent to insert
 	 * @throws IndexOutOfBoundsException if the given index is out of bounds
 	 */
-	public void insert(int index, AudioEvent value) {	
-		validateIndexInsert(index);
-		
-		if(elementCount == elements.length) 
+	public void insert(int index, AudioEvent value) {
+		if (index < 0 || index > elementCount)
+			throw new IndexOutOfBoundsException("Provided index is not in range of elements array");
+
+		if (elementCount == elements.length)
 			doubleBackingArray();
 
 		for (int ElementIndex = elementCount; ElementIndex > index; ElementIndex--)
 			elements[ElementIndex] = elements[ElementIndex - 1];
-		
+
 		elements[index] = value;
-		
+
 		elementCount++;
 	}
-	
+
 	/**
-	 * Creates a new array with twice the length as the backing array.
-	 * Copies all elements from the backing array to the new array.
-	 * Sets the backing array reference to the new array.
+	 * Creates a new array with twice the length as the backing array. Copies all
+	 * elements from the backing array to the new array. Sets the backing array
+	 * reference to the new array.
 	 */
 	private void doubleBackingArray() {
 		AudioEvent[] largerArray = new AudioEvent[elements.length * 2];
-		for(int i = 0; i < elements.length; i++) 
-			largerArray[i] = elements[i];			
+		for (int i = 0; i < elements.length; i++)
+			largerArray[i] = elements[i];
 		elements = largerArray;
 	}
 
@@ -73,9 +75,9 @@ public class BetterDynamicArray {
 	 * @return the element at the given index
 	 * @throws IndexOutOfBoundsException if the given index is out of bounds
 	 */
-	public AudioEvent get(int index) {		
-		validateIndexElement(index);	
-		return elements[index]; 
+	public AudioEvent get(int index) {
+		validateIndex(index);
+		return elements[index];
 	}
 
 	/**
@@ -84,40 +86,40 @@ public class BetterDynamicArray {
 	 * @return the number of elements
 	 */
 	public int size() {
-		return elementCount; 
+		return elementCount;
 	}
 
 	/**
-	 * Sets (i.e., changes) the AudioEvent stored in this dynamic array at the given index
-	 * to the given integer.
+	 * Sets (i.e., changes) the AudioEvent stored in this dynamic array at the given
+	 * index to the given integer.
 	 * 
 	 * @param index - the index of the element to set
 	 * @param value - the new AudioEvent value for setting the element
 	 * @throws IndexOutOfBoundsException if the given index is out of bounds
 	 */
 	public void set(int index, AudioEvent value) {
-		validateIndexElement(index);
+		validateIndex(index);
 		elements[index] = value;
 	}
 
 	/**
-	 * Removes the AudioEvent at the given index from this dynamic array. 
+	 * Removes the AudioEvent at the given index from this dynamic array.
 	 * 
 	 * @param index - the index of the element to delete
 	 * @throws IndexOutOfBoundsException if the given index is out of bounds
 	 */
 	public void remove(int index) {
-		validateIndexElement(index);
+		validateIndex(index);
 
-		for (int elementIndex = index; elementIndex < elements.length - 1; elementIndex++)
+		for (int elementIndex = index; elementIndex < elementCount; elementIndex++)
 			elements[elementIndex] = elements[elementIndex + 1];
 
 		elementCount--;
 	}
-	
+
 	/**
-	 * Removes the first element in the array that is equal to the given value.
-	 * If no equal element is found, the array is not changed.
+	 * Removes the first element in the array that is equal to the given value. If
+	 * no equal element is found, the array is not changed.
 	 * 
 	 * @param value - the AudioEvent to be removed
 	 */
@@ -130,18 +132,17 @@ public class BetterDynamicArray {
 		if (index >= 0)
 			remove(index);
 	}
-	
+
 	/**
 	 * Removes all elements from the dynamic array.
 	 */
 	public void clear() {
 		elementCount = 0;
 	}
-	
+
 	/**
-	 * Sorts the elements of this dynamic array from smallest to largest.
-	 * This depends on your AudioEvent class implementing the
-	 * Comparable interface.
+	 * Sorts the elements of this dynamic array from smallest to largest. This
+	 * depends on your AudioEvent class implementing the Comparable interface.
 	 */
 	public void sort() {
 		Arrays.sort(elements, 0, elementCount);
@@ -152,25 +153,20 @@ public class BetterDynamicArray {
 	 * 
 	 * @return the textual representation
 	 * 
-	 * DO NOT MODIFY THIS METHOD
+	 *         DO NOT MODIFY THIS METHOD
 	 */
 	public String toString() {
 		String result = "[";
-		if(size() > 0) 
+		if (size() > 0)
 			result += get(0);
-		
-		for(int i = 1; i < size(); i++) 
+
+		for (int i = 1; i < size(); i++)
 			result += ", " + get(i);
-		
+
 		return result + "] backing array length: " + elements.length;
 	}
-	
-	private void validateIndexInsert(int index) {
-		if (index < 0 || index > elementCount)
-			throw new IndexOutOfBoundsException("Provided index is not in range of elements array");
-	}
-	
-	private void validateIndexElement(int index) {
+
+	private void validateIndex(int index) {
 		if (index < 0 || index >= elementCount)
 			throw new IndexOutOfBoundsException("Provided index is not in range of elements array");
 	}
