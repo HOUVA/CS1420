@@ -14,8 +14,8 @@ import javax.swing.JPanel;
  * A TrackEditor is the interactive GUI component for drawing a sequence of note
  * events or volume changes in a track.
  * 
- * @author CS 1420 course staff and ADD YOUR NAME
- * @version ADD THE DATE
+ * @author CS 1420 course staff and Matthew Suggars
+ * @version 11-16-2025
  */
 public class TrackEditor extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -46,7 +46,7 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 	/**
 	 * Create a new TrackEditor with the default configuration.
 	 * 
-	 * @param trackNumber assigned to this track in the midi system
+	 * @param trackNumber assigned to this track in the MIDI system
 	 * @param synthesizer for making sounds
 	 * @param sequencer   for sequencing note events
 	 */
@@ -115,7 +115,7 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 		int previousVolume = 100; // the volume begins with value 100 by default
 		int previousTime = 0; // the beginning of the song
 		g.setColor(lightBlue);
-		
+
 		for (AudioEvent event : events) {
 			if (event instanceof VolumeEvent) {
 				VolumeEvent volEvent = (VolumeEvent) event;
@@ -167,21 +167,11 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 
 			} else if (mode == Mode.COPY) {
 				Color transparentYellow = new Color(252, 236, 3, 128);
-				// TODO Set the color to a new color for copy selection. To make the background
-				// visible
-				// behind this rectangle, set the transparency of this color using the fourth
-				// argument
-				// to the Color constructor, alpha in "new Color(red, green, blue, alpha)".
-				// Adjust this
-				// transparency value as needed. A good starting point is 100.
-				// Draw a rectangle that covers all cells from (copyFromColumn, copyFromRow) to
-				// (copyToColumn, copyToRow)
 				g.setColor(transparentYellow);
-				g.fillRect(colToPixel(this.copyFromColumn), rowToPixel(this.copyFromRow), 
-						colToPixel(this.copyToColumn) - colToPixel(this.copyFromColumn), 
+				g.fillRect(colToPixel(this.copyFromColumn), rowToPixel(this.copyFromRow),
+						colToPixel(this.copyToColumn) - colToPixel(this.copyFromColumn),
 						rowToPixel(this.copyToRow) - rowToPixel(this.copyFromRow));
-				
-				
+
 			}
 		}
 
@@ -199,6 +189,18 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 		}
 	} // end of paintComponent
 
+	/**
+	 * This overridden method handles the events during the mouse being dragged.
+	 * 
+	 * When in Note mode, the length of the note being drawn will increase relative
+	 * to the final location of the mouse being dragged. 
+	 * When in VOLUME mode, the columns which will be affected by a new VolumeEvent 
+	 * extends to the length of the final location of the mouse being dragged.
+	 * When in COPY mode, sets the end region of the copy region to the final location 
+	 * of the mouse being dragged. 
+	 * 
+	 * @param e - MouseEvent
+	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		int mouseRow = pixelToRow(e.getY());
@@ -206,7 +208,8 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 		if (drawing) {
 			if (mode == Mode.NOTE) {
 				noteDuration = mouseCol - this.currentColumn + 1;
-				if (noteDuration < 1) noteDuration = 1;
+				if (noteDuration < 1)
+					noteDuration = 1;
 				if (mouseRow != this.currentRow) {
 					synth.noteOff(trackNumber, rowToPitch(this.currentRow));
 					synth.noteOn(trackNumber, rowToPitch(mouseRow));
@@ -225,18 +228,19 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 		}
 
 	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		// unused inherited method.
-	}
-
+	
+	/**
+	 * This overridden method handles the events during the mouse being clicked. Which is triggered from both BUTTON2 and BUTTON3.
+	 * 
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		int mouseRow = pixelToRow(e.getY());
 		int mouseCol = pixelToCol(e.getX());
 
-		if (e.getButton() == MouseEvent.BUTTON2) {
+		// this was created on a macbook with a trackpad, which registers BUTTON3 as
+		// secondary click.
+		if (e.getButton() == MouseEvent.BUTTON2 || e.getButton() == MouseEvent.BUTTON3) {
 			if (mode == Mode.NOTE) {
 				for (int index = 0; index < events.size(); index++) {
 					if (events.get(index) instanceof NoteEvent) {
@@ -251,24 +255,38 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 				int timeOffset = mouseCol - this.copyFromColumn;
 				int pitchOffset = mouseRow - this.copyFromRow;
 
-				for (int index = 0; index < notesToCopy.size(); index++) {
+				for (NoteEvent copiedEvent : notesToCopy) {
 
-					NoteEvent copyFromEvent = notesToCopy.get(index);
-					int pitch = rowToPitch(pitchToRow(copyFromEvent.getPitch()) + pitchOffset);
+					int copiedTime = copiedEvent.getTime();
 
-					NoteEvent copyToEvent = new NoteEvent(copyFromEvent.getTime() + timeOffset, trackNumber, pitch,
-							copyFromEvent.getDuration());
-					events.add(copyToEvent);
+					int copiedPitch = pitchToRow(copiedEvent.getPitch());
+
+					int pastedTime = copiedTime + timeOffset;
+					int pastedPitch = copiedPitch + pitchOffset;
+
+					events.add(new NoteEvent(pastedTime, this.trackNumber, copiedEvent.getDuration(),
+							rowToPitch(pastedPitch)));
 				}
 			}
 		}
+		repaint();
 
 	}
 
+	/**
+	 * This overridden method handles several events based on mouse being pressed.
+	 * 
+	 * When in NOTE mode, draws a new note based on the location of where the mouse
+	 * is being pressed. When in VOLUME mode, sets the volume of the column based on
+	 * row location where mouse is being pressed. when in COPY mode, sets the
+	 * beginning of the region of notes to copy.
+	 * 
+	 * @param e - MouseEvent
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		this.drawing = true;
 		if (e.getButton() == MouseEvent.BUTTON1) {
+			this.drawing = true;
 			this.currentRow = pixelToRow(e.getY());
 			this.currentColumn = pixelToCol(e.getX());
 
@@ -289,24 +307,36 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 		repaint();
 	}
 
+	/**
+	 * This overridden method handles several events based on mouse being released.
+	 * 
+	 * When in NOTE mode, adds a NoteEvent based on the location of the mouse when
+	 * being released. When in VOLUME mode, adds a VolumeEvent based on the location
+	 * of the mouse when being released. When in COPY mode, collects all NoteEvents
+	 * in copy region and adds them to an ArrayList to be pasted.
+	 * 
+	 * @param e - MouseEvent
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (drawing) {
 			if (mode == Mode.NOTE && noteDuration > 0) {
 				synth.noteOff(trackNumber, rowToPitch(this.currentRow));
-				events.add(new NoteEvent(this.currentColumn, this.trackNumber, noteDuration, rowToPitch(this.currentRow)));
+				events.add(
+						new NoteEvent(this.currentColumn, this.trackNumber, noteDuration, rowToPitch(this.currentRow)));
 			} else if (mode == Mode.VOLUME) {
 				synth.noteOff(trackNumber, 60);
 				events.add(new VolumeEvent(this.currentColumn, trackNumber, rowToVolume(this.currentRow)));
 			} else if (mode == Mode.COPY) {
-				
+				notesToCopy.clear();
+
 				for (AudioEvent event : events) {
-					
+
 					if (event instanceof NoteEvent) {
 						NoteEvent copyNote = (NoteEvent) event;
 						int copyTime = copyNote.getTime();
 						int copyPitch = pitchToRow(copyNote.getPitch());
-						
+
 						if ((copyTime >= this.copyFromColumn && copyTime <= this.copyToColumn)
 								&& (copyPitch >= this.copyFromRow && copyPitch <= this.copyToRow)) {
 							notesToCopy.add(copyNote);
@@ -327,6 +357,11 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// unused inherited method.
+	}
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
 		// unused inherited method.
 	}
 
