@@ -137,7 +137,7 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 	public void stateChanged(ChangeEvent e) {
 		int tempoValue = tempoSlider.getValue();
 		song.setTempo(tempoValue);
-		System.out.println("Tempo slider value is " + tempoValue);
+		System.out.println("Tempo slider value is " + song.getTempo());
 
 		int durationValue = (Integer) durationSpinner.getValue();
 		System.out.println("duration value is " + durationValue);

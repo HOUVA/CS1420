@@ -77,6 +77,7 @@ public class TrackPanel extends JPanel implements ActionListener {
 		instruments = new JComboBox<String>(new Vector<String>(synth.getInstrumentNames()));
 		instrumentGroup.add(instrumentSelector);
 		instrumentGroup.add(instruments);
+		instruments.addActionListener(this);
 
 		muteToggle = new JToggleButton("Mute", new ImageIcon(ROOT_DIR + MUTE_ICON_OFF));
 		muteToggle.setSelectedIcon(new ImageIcon(ROOT_DIR + MUTE_ICON_ON));
@@ -142,6 +143,8 @@ public class TrackPanel extends JPanel implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		synth.setInstrument(trackNumber, instruments.getSelectedIndex());
+		
 		if (muteToggle.isSelected()) {
 			synth.setMute(trackNumber, true);
 			System.out.println("Mute was enabled");

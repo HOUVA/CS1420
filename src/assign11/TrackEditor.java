@@ -230,8 +230,15 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 	}
 	
 	/**
-	 * This overridden method handles the events during the mouse being clicked. Which is triggered from both BUTTON2 and BUTTON3.
+	 * This overridden method handles the events during the mouse being clicked. 
+	 * Which is triggered from both BUTTON2 and BUTTON3 being pressed.
 	 * 
+	 * When in NOTE mode, removes any NoteEvents at the location of the mouse being clicked.
+	 * When in COPY mode, pastes all the note events in the copy region created between the 
+	 * locations of mousePressed and mouseDragged, at the location of the mouse being clicked.
+	 * Does not do anything when in VOLUME mode.
+	 * 
+	 * @param e - MouseEvent
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -275,6 +282,7 @@ public class TrackEditor extends JPanel implements MouseListener, MouseMotionLis
 
 	/**
 	 * This overridden method handles several events based on mouse being pressed.
+	 * Which is handled from BUTTON1 being pressed.
 	 * 
 	 * When in NOTE mode, draws a new note based on the location of where the mouse
 	 * is being pressed. When in VOLUME mode, sets the volume of the column based on
