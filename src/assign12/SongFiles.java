@@ -2,6 +2,8 @@ package assign12;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,8 +12,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class SongFiles {
-	public static class ChronologicalOrder implements Comparator<AudioEvent> {
 
+	public static class ChronologicalOrder implements Comparator<AudioEvent> {
 		@Override
 		public int compare(AudioEvent o1, AudioEvent o2) {
 			if (o1.getTime() != o2.getTime())
@@ -22,6 +24,27 @@ public class SongFiles {
 	}
 
 	public static void writeFile(File file, Song song) {
+		FileWriter writer = null;
+		ArrayList<AudioEvent> track;
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		try {
+			writer = new FileWriter(file);
+			
+			writer.write(song.getTempo() + "\n");
+			writer.write(song.getSongLength() + "\n");
+			
+			for (int index = 0; index < 10; index++) {
+				track = filterEvents(song.getTrack(index));
+				Collections.sort(track, new SongFiles.ChronologicalOrder());
+				writer.write("Track" + index + "\n");
+				writer.write(index + "\n");
+			}
+
+			writer.close();
+		} catch (IOException e) {
+			System.out.println("Unable to locate file");
+		}
 
 	}
 
@@ -29,20 +52,44 @@ public class SongFiles {
 		Scanner fileInput = null;
 		try {
 			fileInput = new Scanner(file);
-			
+
 			song.setTempo(fileInput.nextInt());
 			song.setSongLength(fileInput.nextInt());
-			fileInput.nextLine();
-			
-			
-		}catch (FileNotFoundException | InputMismatchException | IllegalStateException e) {
+
+			for (int index = 0; index < 10; index++) {
+				fileInput.next(); // track0-9
+				fileInput.nextInt(); // trackNumber not needed since it's equal to the index
+
+				int instrumentNum = fileInput.nextInt();
+				int eventQuantity = fileInput.nextInt();
+
+				song.getSynthesizer().setInstrument(index, instrumentNum);
+
+				for (int eventIndex = 0; eventIndex < eventQuantity; eventIndex++) {
+
+					String eventType = fileInput.next();
+					int eventTime = fileInput.nextInt();
+
+					if (eventType.equals("note")) {
+						int eventDuration = fileInput.nextInt();
+						int eventPitch = fileInput.nextInt();
+						song.addNoteEvent(eventTime, index, eventDuration, eventPitch);
+
+					} else {
+						int eventValue = fileInput.nextInt();
+						fileInput.nextInt();
+						song.addVolumeEvent(eventTime, index, eventValue);
+					}
+				}
+			}
+
+		} catch (FileNotFoundException | InputMismatchException | IllegalStateException e) {
 			if (e instanceof FileNotFoundException)
 				System.out.println("Unable to locate file");
-			else 
-				System.out.println("There is data in thhis file that is invalid");
+			else
+				System.out.println("There is data in this file that is invalid");
 		}
-		
-		
+		fileInput.close();
 
 	}
 
@@ -59,10 +106,10 @@ public class SongFiles {
 			} else {
 				for (AudioEvent timeEvent : mappedEvents.get(eventTime)) {
 					if (event instanceof NoteEvent && timeEvent instanceof NoteEvent) {
-						NoteEvent inputEvent = (NoteEvent) event;
+						NoteEvent argEvent= (NoteEvent) event;
 						NoteEvent eventInMap = (NoteEvent) timeEvent;
-						if (inputEvent.getPitch() != eventInMap.getPitch()
-								&& inputEvent.getTime() != eventInMap.getTime()) {
+						if (argEvent.getPitch() != eventInMap.getPitch()
+								&& argEvent.getTime() != eventInMap.getTime()) {
 							mappedEvents.get(eventTime).add(event);
 							filteredEvents.add(event);
 						}
@@ -77,7 +124,7 @@ public class SongFiles {
 				}
 			}
 		}
-		
+
 		Collections.sort(filteredEvents);
 		return filteredEvents;
 	}
