@@ -149,10 +149,11 @@ public class SongFiles {
 	public static ArrayList<AudioEvent> filterEvents(ArrayList<AudioEvent> events) {
 		ArrayList<AudioEvent> filteredEvents = new ArrayList<AudioEvent>();
 		HashMap<Integer, ArrayList<AudioEvent>> mappedEvents = new HashMap<>();
-		boolean isDuplicate = false;
+		
 
 		for (AudioEvent argEvent : events) {
 			Integer ArgEventTime = argEvent.getTime();
+			boolean isDuplicate = false;
 			if (!(mappedEvents.containsKey(ArgEventTime))) {
 				mappedEvents.put(ArgEventTime, new ArrayList<AudioEvent>());
 				mappedEvents.get(ArgEventTime).add(argEvent);
@@ -167,6 +168,9 @@ public class SongFiles {
 							isDuplicate = true;
 							break;
 						}
+					}else if (argEvent instanceof VolumeEvent && mappedEvent instanceof VolumeEvent) {
+						isDuplicate = true;
+						break;
 					}
 				}
 				if (!isDuplicate) {

@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -64,12 +65,13 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 		final String LOOP_ICON_OFF = "point.forward.to.point.capsulepath.fill.png";
 		final String SAVE_ICON = "square.and.arrow.down.png";
 		final String LOAD_ICON = "folder.png";
-		//final String ROOT_DIR = "src/assign12/"; // - use for Eclipse, does not work for GradeScope.
+		// final String ROOT_DIR = "src/assign12/"; // - use for Eclipse, does not work
+		// for GradeScope.
 
 		song = new Song(DEFAULT_TEMPO, DEFAULT_SONG_DURATION);
 
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		JPanel northPanel = new JPanel(new BorderLayout()); // North part of main panel
+		JPanel northPanel = new JPanel(new BorderLayout()); // North part of main panel, 
 		JPanel northLeftPanel = new JPanel(new GridLayout(2, 1)); // Left side of north panel
 		JPanel northCenterPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 15, 0)); // Center of north part of main
 																							// panel
@@ -155,10 +157,8 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		setTempoSlider(tempoSlider.getValue());
-		System.out.println("Tempo slider value is " + song.getTempo());
 
 		int durationValue = (Integer) durationSpinner.getValue();
-		System.out.println("duration value is " + durationValue);
 
 		song.setSongLength(durationValue);
 
@@ -176,29 +176,23 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JFileChooser chooser = new JFileChooser();
-		if (playbackButton.isSelected()) {
+		if (playbackButton.isSelected())
 			song.play();
-			System.out.println("Song is playing");
-		} else {
+		else
 			song.stop();
-			System.out.println("Song is not playing");
-		}
 
-		if (playbackLoop.isSelected()) {
+		if (playbackLoop.isSelected())
 			song.enableLoop(true);
-			System.out.println("Playback loop is on");
-		} else {
-			song.enableLoop(false);
-			System.out.println("Playback loop is off");
-		}
 
-		Object source = e.getSource();
+		else
+			song.enableLoop(false);
+
 		chooser.setFileFilter(new FileNameExtensionFilter("Song files", "song"));
-		if (source == save) {
+		if (e.getSource() == save) {
 			int saveSelection = chooser.showSaveDialog(this);
 			if (saveSelection == JFileChooser.APPROVE_OPTION)
-				SongFiles.writeFile(chooser.getSelectedFile(), song);
-		} else if (source == load) {
+				SongFiles.writeFile(new File(chooser.getSelectedFile().getAbsolutePath() + ".song"), song);
+		} else if (e.getSource() == load) {
 			int loadSelection = chooser.showOpenDialog(this);
 			if (loadSelection == JFileChooser.APPROVE_OPTION) {
 				SongFiles.readFile(chooser.getSelectedFile(), song);
@@ -210,9 +204,10 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 			}
 		}
 	}
-	
+
 	/**
-	 * This helper method checks whether the new tempo is within the slider's range and adjusts it accordingly.
+	 * This helper method checks whether the new tempo is within the slider's range
+	 * and adjusts it accordingly.
 	 * 
 	 * @param newTempo - a new tempo value.
 	 */

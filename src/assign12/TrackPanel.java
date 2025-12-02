@@ -60,7 +60,7 @@ public class TrackPanel extends JPanel implements ActionListener {
 		final String VOLUME_ICON_OFF = "speaker.png";
 		final String COPY_PASTE_ICON_OFF = "document.on.document.png";
 		final String COPY_PASTE_ICON_ON = "document.on.document.fill.png";
-		//final String ROOT_DIR = "src/assign12/";
+		// final String ROOT_DIR = "src/assign12/"; - needed for use in Eclipse
 
 		this.trackNumber = trackNumber;
 		this.synth = synth;
@@ -145,30 +145,24 @@ public class TrackPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		synth.setInstrument(trackNumber, instruments.getSelectedIndex());
-		
-		if (muteToggle.isSelected()) {
+
+		if (muteToggle.isSelected())
 			synth.setMute(trackNumber, true);
-			System.out.println("Mute was enabled");
-		} else {
+
+		else
 			synth.setMute(trackNumber, false);
-			System.out.println("Must is not enabled");
-		}
 
-		if (noteMode.isSelected()) {
+		if (noteMode.isSelected())
 			trackEditor.setMode(TrackEditor.Mode.NOTE);
-			System.out.println("Note editor is enabled");
-		} else if (volumeMode.isSelected()) {
-			trackEditor.setMode(TrackEditor.Mode.VOLUME);
-			System.out.println("Volume editor is enabled");
-		} else if (copyPasteMode.isSelected()) {
-			trackEditor.setMode(TrackEditor.Mode.COPY);
-			System.out.println("Copy paste mode enabled");
-		}
 
-		if (e.getSource() == (clearTrack)) {
+		else if (volumeMode.isSelected())
+			trackEditor.setMode(TrackEditor.Mode.VOLUME);
+
+		else if (copyPasteMode.isSelected())
+			trackEditor.setMode(TrackEditor.Mode.COPY);
+
+		if (e.getSource() == (clearTrack))
 			trackEditor.clearTrack();
-			System.out.println("Clear track was pressed");
-		}
 
 	}
 
