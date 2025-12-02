@@ -9,8 +9,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * This class manages any files created or read by the SoundSketcher application.
+ * Includes the ability to read and write .song files, as well as filter out any duplicate events.
+ * 
+ * @author Matthew Suggars
+ * @version 11-28-2025
+ */
 public class SongFiles {
 
 	public static class ChronologicalOrder implements Comparator<AudioEvent> {
@@ -23,31 +31,70 @@ public class SongFiles {
 
 	}
 
+	/**
+	 * This method takes data from Song, and writes to a new .song file containing all of the data for each track and 
+	 * AudioEvent.
+	 * 
+	 * @param file - file to write data from Song
+	 * @param song - contains data being written to file
+	 */
 	public static void writeFile(File file, Song song) {
 		FileWriter writer = null;
 		ArrayList<AudioEvent> track;
 		StringBuilder stringBuilder = new StringBuilder();
-		
+
 		try {
 			writer = new FileWriter(file);
-			
-			writer.write(song.getTempo() + "\n");
-			writer.write(song.getSongLength() + "\n");
-			
+
+			stringBuilder.append(song.getTempo() + "\n");
+			stringBuilder.append(song.getSongLength() + "\n");
+
 			for (int index = 0; index < 10; index++) {
+				// filtering and sorting an ArrayList to write
 				track = filterEvents(song.getTrack(index));
 				Collections.sort(track, new SongFiles.ChronologicalOrder());
-				writer.write("Track" + index + "\n");
-				writer.write(index + "\n");
-			}
 
+				stringBuilder.append("Track" + index + "\n");
+				stringBuilder.append(index + "\n");
+				stringBuilder.append(song.getSynthesizer().getInstrument(index) + "\n");
+				stringBuilder.append(track.size() + "\n");
+
+				// data for AudioEvent blocks
+				for (AudioEvent event : track) {
+					if (event instanceof NoteEvent) {
+						NoteEvent noteEvent = (NoteEvent) event;
+
+						stringBuilder.append("note\n");
+						stringBuilder.append(noteEvent.getTime() + "\n");
+						stringBuilder.append(noteEvent.getDuration() + "\n");
+						stringBuilder.append(noteEvent.getPitch() + "\n");
+
+					} else {
+						VolumeEvent volumeEvent = (VolumeEvent) event;
+
+						stringBuilder.append("volume\n");
+						stringBuilder.append(volumeEvent.getTime() + "\n");
+						stringBuilder.append(volumeEvent.getValue() + "\n");
+						stringBuilder.append(0 + "\n");
+					}
+
+				}
+
+			}
+			writer.write(stringBuilder.toString());
 			writer.close();
 		} catch (IOException e) {
 			System.out.println("Unable to locate file");
 		}
 
 	}
-
+	
+	/**
+	 * This method reads data from a .song file, and changes the Song Object with that data.
+	 * 
+	 * @param file - file to read data from
+	 * @param song - Song object to manipulate data, being ready from file.
+	 */
 	public static void readFile(File file, Song song) {
 		Scanner fileInput = null;
 		try {
@@ -93,34 +140,38 @@ public class SongFiles {
 
 	}
 
+	/**
+	 * This method filters any potential duplicate AudioEvents within a Song object.
+	 * 
+	 * @param events - ArrayList of AudioEvents to check for duplicates.
+	 * @return a new ArrayList of AudioEvents containing no duplicates.
+	 */
 	public static ArrayList<AudioEvent> filterEvents(ArrayList<AudioEvent> events) {
 		ArrayList<AudioEvent> filteredEvents = new ArrayList<AudioEvent>();
 		HashMap<Integer, ArrayList<AudioEvent>> mappedEvents = new HashMap<>();
+		boolean isDuplicate = false;
 
-		for (AudioEvent event : events) {
-			Integer eventTime = event.getTime();
-			if (!(mappedEvents.containsKey(eventTime))) {
-				mappedEvents.put(eventTime, new ArrayList<AudioEvent>());
-				mappedEvents.get(eventTime).add(event);
-				filteredEvents.add(event);
+		for (AudioEvent argEvent : events) {
+			Integer ArgEventTime = argEvent.getTime();
+			if (!(mappedEvents.containsKey(ArgEventTime))) {
+				mappedEvents.put(ArgEventTime, new ArrayList<AudioEvent>());
+				mappedEvents.get(ArgEventTime).add(argEvent);
+				filteredEvents.add(argEvent);
 			} else {
-				for (AudioEvent timeEvent : mappedEvents.get(eventTime)) {
-					if (event instanceof NoteEvent && timeEvent instanceof NoteEvent) {
-						NoteEvent argEvent= (NoteEvent) event;
-						NoteEvent eventInMap = (NoteEvent) timeEvent;
-						if (argEvent.getPitch() != eventInMap.getPitch()
-								&& argEvent.getTime() != eventInMap.getTime()) {
-							mappedEvents.get(eventTime).add(event);
-							filteredEvents.add(event);
-						}
-					} else if (event instanceof VolumeEvent && timeEvent instanceof VolumeEvent) {
-						VolumeEvent inputEvent = (VolumeEvent) event;
-						VolumeEvent eventInMap = (VolumeEvent) timeEvent;
-						if (inputEvent.getTime() != eventInMap.getTime()) {
-							mappedEvents.get(eventTime).add(event);
-							filteredEvents.add(event);
+				ArrayList<AudioEvent> entry = mappedEvents.get(ArgEventTime);
+				for (AudioEvent mappedEvent : entry) {
+					if (argEvent instanceof NoteEvent && mappedEvent instanceof NoteEvent) {
+						NoteEvent argNoteEvent = (NoteEvent) argEvent;
+						NoteEvent mapNoteEvent = (NoteEvent) mappedEvent;
+						if (argNoteEvent.getPitch() == mapNoteEvent.getPitch()) {
+							isDuplicate = true;
+							break;
 						}
 					}
+				}
+				if (!isDuplicate) {
+					mappedEvents.get(ArgEventTime).add(argEvent);
+					filteredEvents.add(argEvent);
 				}
 			}
 		}

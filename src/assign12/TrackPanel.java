@@ -60,7 +60,7 @@ public class TrackPanel extends JPanel implements ActionListener {
 		final String VOLUME_ICON_OFF = "speaker.png";
 		final String COPY_PASTE_ICON_OFF = "document.on.document.png";
 		final String COPY_PASTE_ICON_ON = "document.on.document.fill.png";
-		final String ROOT_DIR = "src/assign11/";
+		//final String ROOT_DIR = "src/assign12/";
 
 		this.trackNumber = trackNumber;
 		this.synth = synth;
@@ -79,26 +79,26 @@ public class TrackPanel extends JPanel implements ActionListener {
 		instrumentGroup.add(instruments);
 		instruments.addActionListener(this);
 
-		muteToggle = new JToggleButton("Mute", new ImageIcon(ROOT_DIR + MUTE_ICON_OFF));
-		muteToggle.setSelectedIcon(new ImageIcon(ROOT_DIR + MUTE_ICON_ON));
+		muteToggle = new JToggleButton("Mute", new ImageIcon(MUTE_ICON_OFF));
+		muteToggle.setSelectedIcon(new ImageIcon(MUTE_ICON_ON));
 		muteToggle.addActionListener(this);
 
 		// Editing modes JToggle Group
 		ButtonGroup editingModes = new ButtonGroup();
-		noteMode = new JToggleButton("Note Editor", new ImageIcon(ROOT_DIR + NOTE_ICON_OFF));
-		noteMode.setSelectedIcon(new ImageIcon(ROOT_DIR + NOTE_ICON_ON));
+		noteMode = new JToggleButton("Note Editor", new ImageIcon(NOTE_ICON_OFF));
+		noteMode.setSelectedIcon(new ImageIcon(NOTE_ICON_ON));
 		noteMode.addActionListener(this);
 		noteMode.setSelected(true);
-		volumeMode = new JToggleButton("Volume Editor", new ImageIcon(ROOT_DIR + VOLUME_ICON_OFF));
-		volumeMode.setSelectedIcon(new ImageIcon(ROOT_DIR + VOLUME_ICON_ON));
+		volumeMode = new JToggleButton("Volume Editor", new ImageIcon(VOLUME_ICON_OFF));
+		volumeMode.setSelectedIcon(new ImageIcon(VOLUME_ICON_ON));
 		volumeMode.setIconTextGap(15);
 		volumeMode.addActionListener(this);
-		copyPasteMode = new JToggleButton("Copy/Pase", new ImageIcon(ROOT_DIR + COPY_PASTE_ICON_OFF));
-		copyPasteMode.setSelectedIcon(new ImageIcon(ROOT_DIR + COPY_PASTE_ICON_ON));
+		copyPasteMode = new JToggleButton("Copy/Pase", new ImageIcon(COPY_PASTE_ICON_OFF));
+		copyPasteMode.setSelectedIcon(new ImageIcon(COPY_PASTE_ICON_ON));
 		copyPasteMode.addActionListener(this);
-		clearTrack = new JButton("Clear Track", new ImageIcon(ROOT_DIR + CLEAR_TRACK));
+		clearTrack = new JButton("Clear Track", new ImageIcon(CLEAR_TRACK));
 		clearTrack.addActionListener(this);
-		clearTrack.setPressedIcon(new ImageIcon(ROOT_DIR + CLEAR_TRACK_PRESSED));
+		clearTrack.setPressedIcon(new ImageIcon(CLEAR_TRACK_PRESSED));
 
 		editingModes.add(noteMode);
 		editingModes.add(volumeMode);

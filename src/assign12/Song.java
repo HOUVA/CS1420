@@ -121,7 +121,7 @@ public class Song {
 	// They will be used in the next stages of the project.
 	//////////////////////////////////////////////////////////////////////
 
-	/**
+	/**	
 	 * Get the playing speed of the song.
 	 * 
 	 * @return tempo

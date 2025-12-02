@@ -10,9 +10,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
@@ -44,6 +49,8 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 	private JTabbedPane centerTabs;
 	private JLabel tempoSliderLabel;
 	private JLabel durationLabel;
+	private JMenuItem save;
+	private JMenuItem load;
 
 	/**
 	 * Creates a Sound Sketcher GUI
@@ -55,29 +62,42 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 		final String PLAY_PAUSE_ICON_ON = "playpause.fill.png";
 		final String LOOP_ICON_ON = "point.forward.to.point.capsulepath.png";
 		final String LOOP_ICON_OFF = "point.forward.to.point.capsulepath.fill.png";
-		final String ROOT_DIR = "src/assign11/";
+		final String SAVE_ICON = "square.and.arrow.down.png";
+		final String LOAD_ICON = "folder.png";
+		//final String ROOT_DIR = "src/assign12/"; // - use for Eclipse, does not work for GradeScope.
 
 		song = new Song(DEFAULT_TEMPO, DEFAULT_SONG_DURATION);
 
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		JPanel northPanel = new JPanel(new BorderLayout()); // North part of main panel
 		JPanel northLeftPanel = new JPanel(new GridLayout(2, 1)); // Left side of north panel
-		JPanel northCenterPanel = new JPanel(); // Center of north part of main panel
-
-		northCenterPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 15, 0));
+		JPanel northCenterPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 15, 0)); // Center of north part of main
+																							// panel
 
 		this.setTitle("Sound Sketcher");
 		this.setPreferredSize(new Dimension(820, 740));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		northCenterPanel.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
-		// JToggleButton Settings
-		playbackButton = new JToggleButton(new ImageIcon(ROOT_DIR + PLAY_PAUSE_ICON_OFF));
-		playbackButton.setSelectedIcon(new ImageIcon(ROOT_DIR + PLAY_PAUSE_ICON_ON));
+		// Playback and Loop button Settings
+		playbackButton = new JToggleButton(new ImageIcon(PLAY_PAUSE_ICON_OFF));
+		playbackButton.setSelectedIcon(new ImageIcon(PLAY_PAUSE_ICON_ON));
 		playbackButton.addActionListener(this);
-		playbackLoop = new JToggleButton(new ImageIcon(ROOT_DIR + LOOP_ICON_ON));
-		playbackLoop.setSelectedIcon(new ImageIcon(ROOT_DIR + LOOP_ICON_OFF));
+		playbackLoop = new JToggleButton(new ImageIcon(LOOP_ICON_ON));
+		playbackLoop.setSelectedIcon(new ImageIcon(LOOP_ICON_OFF));
 		playbackLoop.addActionListener(this);
+
+		// Menu Settings
+		JMenu menu = new JMenu("File");
+		JMenuBar menuBar = new JMenuBar();
+		save = new JMenuItem("Save Song", new ImageIcon(SAVE_ICON));
+		save.addActionListener(this);
+		load = new JMenuItem("Load Song", new ImageIcon(LOAD_ICON));
+		load.addActionListener(this);
+		menu.add(save);
+		menu.add(load);
+		menuBar.add(menu);
+		this.setJMenuBar(menuBar);
 
 		// TempoSlider Settings
 		tempoSlider = new JSlider(20, 600);
@@ -89,20 +109,18 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 		tempoSlider.addChangeListener(this);
 		tempoSlider.setPreferredSize(new Dimension(400, 120));
 
-		// JSpinner settings
+		// Song duration spinner settings
 		durationSpinner = new JSpinner(new SpinnerNumberModel(DEFAULT_SONG_DURATION, 4, 1024, 4));
 		durationSpinner.addChangeListener(this);
 
-		// TrackPanel settings
+		// TrackPanel Tabs settings
+		centerTabs = new JTabbedPane();
 		trackPanelList = new TrackPanel[10];
 		for (int index = 0; index < 10; index++) {
 			trackPanelList[index] = new TrackPanel(index, song.getSongLength(), song.getTrack(index),
 					song.getSynthesizer());
+			centerTabs.addTab("Track " + (index + 1), trackPanelList[index]);
 		}
-
-		// JTabbedPane settings
-		centerTabs = new JTabbedPane();
-		centerTabs.addTab("Track ", trackPanelList[0]);
 
 		// North left Panel Settings
 		northLeftPanel.setPreferredSize(new Dimension(100, 75));
@@ -111,7 +129,7 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 
 		// North Center Panel Settings
 		tempoSliderLabel = new JLabel("Tempo Slider");
-		durationLabel = new JLabel("Duration");
+		durationLabel = new JLabel("Song Length");
 		northCenterPanel.add(tempoSliderLabel);
 		northCenterPanel.add(tempoSlider);
 		northCenterPanel.add(durationLabel);
@@ -125,6 +143,7 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 
 		this.add(mainPanel);
 		this.pack();
+
 	}
 
 	/**
@@ -135,8 +154,7 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		int tempoValue = tempoSlider.getValue();
-		song.setTempo(tempoValue);
+		setTempoSlider(tempoSlider.getValue());
 		System.out.println("Tempo slider value is " + song.getTempo());
 
 		int durationValue = (Integer) durationSpinner.getValue();
@@ -157,6 +175,7 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		JFileChooser chooser = new JFileChooser();
 		if (playbackButton.isSelected()) {
 			song.play();
 			System.out.println("Song is playing");
@@ -172,5 +191,36 @@ public class SoundSketcherFrame extends JFrame implements ActionListener, Change
 			song.enableLoop(false);
 			System.out.println("Playback loop is off");
 		}
+
+		Object source = e.getSource();
+		chooser.setFileFilter(new FileNameExtensionFilter("Song files", "song"));
+		if (source == save) {
+			int saveSelection = chooser.showSaveDialog(this);
+			if (saveSelection == JFileChooser.APPROVE_OPTION)
+				SongFiles.writeFile(chooser.getSelectedFile(), song);
+		} else if (source == load) {
+			int loadSelection = chooser.showOpenDialog(this);
+			if (loadSelection == JFileChooser.APPROVE_OPTION) {
+				SongFiles.readFile(chooser.getSelectedFile(), song);
+				for (int index = 0; index < trackPanelList.length; index++) {
+					trackPanelList[index].setSongLength(song.getSongLength());
+					trackPanelList[index].setInstrument(song.getSynthesizer().getInstrument(index));
+					setTempoSlider(song.getTempo());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * This helper method checks whether the new tempo is within the slider's range and adjusts it accordingly.
+	 * 
+	 * @param newTempo - a new tempo value.
+	 */
+	private void setTempoSlider(int newTempo) {
+		if (newTempo < tempoSlider.getMinimum())
+			tempoSlider.setMinimum(newTempo);
+		else if (newTempo > tempoSlider.getMaximum())
+			tempoSlider.setMaximum(newTempo);
+		tempoSlider.setValue(newTempo);
 	}
 }
