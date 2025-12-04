@@ -90,7 +90,7 @@ public class SongFiles {
 	}
 	
 	/**
-	 * This method reads data from a .song file, and changes the Song Object with that data.
+	 * This method reads data from a .song file, and updates data within the Song Object.
 	 * 
 	 * @param file - file to read data from
 	 * @param song - Song object to manipulate data, being ready from file.
